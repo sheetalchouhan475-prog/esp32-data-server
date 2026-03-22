@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 import joblib
 
 # Flask app
-app = Flask(_name_)
+app = Flask(__name__)
 
 # Load trained model
 model = joblib.load("model.pkl")  # ensure model.pkl GitHub repo me uploaded ho
