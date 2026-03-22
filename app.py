@@ -1,15 +1,38 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
+import joblib
 
+# Flask app
 app = Flask(_name_)
 
-@app.route('/')
+# Load trained model
+model = joblib.load("model.pkl")  # ensure model.pkl GitHub repo me uploaded ho
+
+# Home route
+@app.route("/")
 def home():
-    return "Server Running"
+    return "AI Agriculture Server Running"
 
-@app.route('/data')
-def data():
-    value = request.args.get('value')
-    print("Sensor Data:", value)
-    return "Data Received"
+# Predict route
+@app.route("/predict", methods=["POST"])
+def predict():
+    data = request.json  # ESP32 JSON data
 
-app.run(host='0.0.0.0', port=10000)
+    # Extract sensor values
+    soil = data["soil"]
+    temp = data["temp"]
+    humidity = data["humidity"]
+
+    # Prediction (Decision Tree model)
+    prediction = model.predict([[soil, temp, humidity]])
+
+    # Convert prediction to readable message
+    if prediction[0] == 1:
+        result = "Irrigation Needed"
+    else:
+        result = "No Irrigation Needed"
+
+    return jsonify({"prediction": result})
+
+# Correct way to start Flask server
+if _name_ == "_main_":
+    app.run()
