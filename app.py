@@ -34,5 +34,5 @@ def predict():
     return jsonify({"prediction": result})
 
 # Correct way to start Flask server
-if _name_ == "_main_":
+if __name__ == "__main__":
     app.run()
